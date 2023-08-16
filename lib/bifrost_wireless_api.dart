@@ -1,10 +1,8 @@
 library bifrost_wireless_api;
 
 export 'package:bifrost_wireless_api/bifrost_wireless_api.dart';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart' show GetIt;
 import 'dart:convert';
@@ -21,7 +19,7 @@ class WlanInfo {
 }
 
 class BifrostApi {
-  List WlanBodyKeys = [
+  List wlanBodyKeys = [
     'ssid',
     'enabled',
     'key',
@@ -49,7 +47,7 @@ class BifrostApi {
         GetIt.I.registerSingleton<SetToken>(SetToken(token));
       }
     } else {
-      print(response.body);
+      //print(response.body);
     }
   }
 
@@ -96,7 +94,7 @@ class BifrostApi {
     }
 
     changes.forEach((key, value) {
-      if (WlanBodyKeys.contains(key)) {
+      if (wlanBodyKeys.contains(key)) {
         keysOk = true;
       }
     });
@@ -117,7 +115,7 @@ class BifrostApi {
       if (response.statusCode == 200) {
         actionApply(ip, token);
       } else {
-        print(response.body);
+        //print(response.body);
       }
     }
   }
@@ -133,14 +131,14 @@ class BifrostApi {
               body: jsonEncode(<String, dynamic>{'actionID': 5}));
 
       if (response.statusCode == 200) {
-        print('Success!');
+        //print('Success!');
       } else {
-        print('Request failed with status: ${response.statusCode}.');
+        //print('Request failed with status: ${response.statusCode}.');
       }
-    } on SocketException catch (e) {
-      print('Network error occurred: ${e.message}');
+
+      //print('Network error occurred: ${e.message}');
     } catch (e) {
-      print('Error: $e');
+      //print('Error: $e');
     }
   }
 
@@ -174,16 +172,17 @@ class BifrostApi {
     if (response.statusCode == 200) {
       actionApply(ip, token);
     } else {
-      print(response.body);
+      //print(response.body);
     }
   }
 }
 
 class AddWireless extends StatefulWidget {
-  AddWireless(this.ip, this.token, this.wlanList, {Key? key}) : super(key: key);
-  String ip;
-  String token;
-  List wlanList;
+  const AddWireless(this.ip, this.token, this.wlanList, {Key? key})
+      : super(key: key);
+  final String ip;
+  final String token;
+  final List wlanList;
   @override
   State<AddWireless> createState() => _AddWirelessState();
 }
@@ -196,9 +195,9 @@ class _AddWirelessState extends State<AddWireless> {
       GlobalKey<FlutterPwValidatorState>();
   final passInput = TextEditingController();
   final netNameInput = TextEditingController();
-  Color G5color = Colors.blue;
-  Color G2color = Colors.grey;
-  Icon frequencyToggle = Icon(
+  Color g5color = Colors.blue;
+  Color g2color = Colors.grey;
+  Icon frequencyToggle = const Icon(
     Icons.toggle_on,
     size: 40,
     color: Colors.blue,
@@ -216,50 +215,50 @@ class _AddWirelessState extends State<AddWireless> {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              margin: EdgeInsets.fromLTRB(8, 8, 2, 8),
-              padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+              margin: const EdgeInsets.fromLTRB(8, 8, 2, 8),
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
               child: Column(children: [
                 Row(children: [
                   Text(
                     '2.4GHz',
-                    style: TextStyle(color: G2color),
+                    style: TextStyle(color: g2color),
                   ),
                   IconButton(
                     icon: frequencyToggle,
                     onPressed: () {
                       if (is5g) {
                         setState(() {
-                          G2color = Colors.blue;
-                          frequencyToggle = Icon(
+                          g2color = Colors.blue;
+                          frequencyToggle = const Icon(
                             Icons.toggle_off,
                             size: 40,
                             color: Colors.blue,
                           );
-                          G5color = Colors.grey;
+                          g5color = Colors.grey;
                           is5g = false;
                           frequency = 0;
                         });
                       } else {
                         setState(() {
-                          G2color = Colors.grey;
-                          frequencyToggle = Icon(
+                          g2color = Colors.grey;
+                          frequencyToggle = const Icon(
                             Icons.toggle_on,
                             size: 40,
                             color: Colors.blue,
                           );
-                          G5color = Colors.blue;
+                          g5color = Colors.blue;
                           is5g = true;
                           frequency = 1;
                         });
                       }
                     },
                   ),
-                  Text('  5GHz', style: TextStyle(color: G5color))
+                  Text('  5GHz', style: TextStyle(color: g5color))
                 ]),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'SSID',
                     ),
@@ -267,11 +266,11 @@ class _AddWirelessState extends State<AddWireless> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: TextField(
                     obscureText: !passwordVisible,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: 'Senha',
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -314,10 +313,10 @@ class _AddWirelessState extends State<AddWireless> {
                         validKey = false;
                         buttonColor = Colors.grey;
                       });
-                      print("NOT MATCHED");
+                      //print("NOT MATCHED");
                     }),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: buttonColor),
+                  style: ElevatedButton.styleFrom(backgroundColor: buttonColor),
                   onPressed: validKey
                       ? () => BifrostApi().setNewWireless(
                           widget.ip,
@@ -329,7 +328,7 @@ class _AddWirelessState extends State<AddWireless> {
                       : null,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       Text(
                         "Aplicar",
                       )
@@ -344,13 +343,14 @@ class _AddWirelessState extends State<AddWireless> {
 //this widget will show a container with box to edit the ssid and password
 //of the wlan id passed in the id parameter
 class WirelessModifier extends StatefulWidget {
-  WirelessModifier(this.ip, this.token, this.id, this.wlanList, {Key? key})
+  const WirelessModifier(this.ip, this.token, this.id, this.wlanList,
+      {Key? key})
       : super(key: key);
 
-  String ip;
-  String token;
-  String id;
-  List wlanList;
+  final String ip;
+  final String token;
+  final String id;
+  final List wlanList;
   @override
   State<WirelessModifier> createState() => _WirelessModifierState();
 }
@@ -390,13 +390,13 @@ class _WirelessModifierState extends State<WirelessModifier> {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              margin: EdgeInsets.fromLTRB(8, 8, 2, 8),
-              padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+              margin: const EdgeInsets.fromLTRB(8, 8, 2, 8),
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
               child: Column(children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'SSID',
                     ),
@@ -404,11 +404,11 @@ class _WirelessModifierState extends State<WirelessModifier> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: TextField(
                     obscureText: !passwordVisible,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: 'Senha',
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -451,10 +451,10 @@ class _WirelessModifierState extends State<WirelessModifier> {
                         validKey = false;
                         buttonColor = Colors.grey;
                       });
-                      print("NOT MATCHED");
+                      //print("NOT MATCHED");
                     }),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: buttonColor),
+                  style: ElevatedButton.styleFrom(backgroundColor: buttonColor),
                   onPressed: validKey
                       ? () => BifrostApi().modifyWireless(
                           widget.ip,
@@ -465,7 +465,7 @@ class _WirelessModifierState extends State<WirelessModifier> {
                       : null,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       Text(
                         "Aplicar",
                       )
@@ -480,8 +480,8 @@ class _WirelessModifierState extends State<WirelessModifier> {
 //this widget will show a container with box to put user and password to
 //login in CPE
 class Login extends StatefulWidget {
-  Login(this.ip, {Key? key}) : super(key: key);
-  String ip;
+  const Login(this.ip, {Key? key}) : super(key: key);
+  final String ip;
 
   @override
   State<Login> createState() => _LoginState();
@@ -503,13 +503,13 @@ class _LoginState extends State<Login> {
           border: Border.all(),
           borderRadius: BorderRadius.circular(8.0),
         ),
-        margin: EdgeInsets.fromLTRB(8, 8, 2, 8),
-        padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+        margin: const EdgeInsets.fromLTRB(8, 8, 2, 8),
+        padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
         child: Column(children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Usuário',
               ),
@@ -517,11 +517,11 @@ class _LoginState extends State<Login> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: TextField(
               obscureText: !passwordVisible,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 labelText: 'Senha',
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -547,7 +547,7 @@ class _LoginState extends State<Login> {
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Text(
                   "Login",
                 )
@@ -561,9 +561,9 @@ class _LoginState extends State<Login> {
 //this widget will show a container with a list of buttons of the all wireless
 //setted
 class WlanView extends StatefulWidget {
-  WlanView(this.ip, this.token, {Key? key}) : super(key: key);
-  String ip;
-  String token;
+  const WlanView(this.ip, this.token, {Key? key}) : super(key: key);
+  final String ip;
+  final String token;
   @override
   State<WlanView> createState() => _WlanViewState();
 }
@@ -608,7 +608,7 @@ class _WlanViewState extends State<WlanView> {
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
               Icon(Icons.add_circle_outline),
               Text(
                 "Add Wifi",

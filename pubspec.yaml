@@ -1,7 +1,7 @@
 name: bifrost_wireless_api
 description: A Flutter package to control the intelbras CPEs that contain the bifrost api embedded.
 version: 0.0.1
-homepage:
+homepage: https://github.com/timmaiaaac/bifrost_wireless_api
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
