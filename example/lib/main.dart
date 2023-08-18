@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:bifrost_wireless_api/bifrost_wireless_api.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart' show GetIt;
 
 void main() {
   runApp(const MyApp());
@@ -35,12 +33,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String myIp = '192.168.1.1';
   Timer? myTimer;
+  String? tryToken;
+  BifrostApi bifrost = BifrostApi();
   updatePage() {
     myTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (GetIt.I.isRegistered<SetToken>()) {
-        BifrostApi().getWireless(myIp, GetIt.I.get<SetToken>().token);
-        if (GetIt.I.isRegistered<WlanInfo>()) {
-          print(GetIt.I.get<WlanInfo>().wlanCompleteInfo.toString());
+      tryToken = checkSessionActive;
+      if (tryToken != null) {
+        bifrost.getWireless(myIp, tryToken, context);
+        if (checkWifiInfo) {
           setState(() {
             myTimer?.cancel();
             isLogged();
@@ -51,8 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   isLogged() {
-    if (GetIt.I.isRegistered<SetToken>()) {
-      return WlanView(myIp, GetIt.I.get<SetToken>().token);
+    if (tryToken != null) {
+      final token = tryToken ?? '0';
+      return WlanView(myIp, token);
     } else {
       return Login(myIp);
     }
