@@ -186,6 +186,7 @@ class WirelessModifier extends StatefulWidget {
 class _WirelessModifierState extends State<WirelessModifier> {
   bool passwordVisible = false;
   bool validKey = false;
+  bool isRoot = true;
   Color buttonColor = Colors.grey;
   final GlobalKey<FlutterPwValidatorState> validatorKey =
       GlobalKey<FlutterPwValidatorState>();
@@ -203,6 +204,7 @@ class _WirelessModifierState extends State<WirelessModifier> {
         setState(() {
           passInput.text = wlan['key'];
           netNameInput.text = wlan['ssid'];
+          isRoot = wlan['isRoot'];
         });
       }
     }
@@ -301,7 +303,32 @@ class _WirelessModifierState extends State<WirelessModifier> {
                       )
                     ],
                   ),
-                )
+                ),
+                Visibility(
+                    visible: !isRoot,
+                    child: Container(
+                        margin: const EdgeInsets.fromLTRB(10, 100, 10, 100),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red.shade900),
+                          onPressed: () {
+                            BifrostApi().deleteWireless(
+                                widget.ip, widget.token, widget.id, context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "Excluir",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
+                        )))
               ]));
         }));
   }

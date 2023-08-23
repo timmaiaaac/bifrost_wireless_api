@@ -130,6 +130,21 @@ class BifrostApi {
     }
   }
 
+  deleteWireless(ip, token, id, context) async {
+    var response = await http.delete(
+      Uri.parse('http://$ip/api/v1/wireless/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    if (response.statusCode == 200) {
+      actionApply(ip, token, context);
+    } else if (response.statusCode != 200) {
+      _showMyDialog('Falha', response.body, context);
+    }
+  }
+
   setNewWireless(ip, token, frequency, ssid, key, ieee, context) async {
     String radio = 'radio0';
     if (frequency == 0) {
