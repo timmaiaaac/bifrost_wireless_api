@@ -8,3 +8,9 @@ This package will help you to use the user login in /session and change wireless
 
 Warning: without the correct user/admin access password of the CPEs this package will not work, then this package is to professional developers that work at operators and providers.
 
+
+https://github.com/timmaiaaac/bifrost_wireless_api/assets/67709278/916a9498-fe8d-4483-8581-20a75a31f757
+
+
+https://github.com/timmaiaaac/bifrost_wireless_api/assets/67709278/d60428d6-5375-4b76-b86f-c56a1e61ef0c
+
